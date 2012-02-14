@@ -1,0 +1,1 @@
+arecord -D plughw:0,0 -r 16000 -f S16_LE -c 2 -t raw -d 10 | lame -s 16 -r - blackbird.mp3
