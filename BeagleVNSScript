@@ -2,17 +2,17 @@
 # Nov-5-2012
 
 # Move the Temp Audio File to The BeagleVNS Audio File
-mv ~/tmp/audio.raw ~/BeagleBoardVNS/AudioFiles
+# mv ~/tmp/audio.raw ~/BeagleBoardVNS/AudioFiles
 
 # Move to the BeagleVNS Directory
 cd ~/BeagleBoardVNS/AudioFiles
 
 # Encode the audio.raw into a mp3 file
 mp3Name = "Message"$(date+"%m-%d-%Y-%T")
-lame  -s 16 -r -m m audio.raw $mp3Name.mp3
-
+# lame  -s 16 -r -m m audio.raw $mp3Name.mp3
+arecord -D plughw:0,0 -r 16000 -f S16_LE -c 2 -t raw -d 30 | lame  -s 16 -r - $mp3Name.mp3
 #Delete the old audio
-rm audio.raw
+# rm audio.raw
 
 # Send an email with mp3 as an attachment
 python smtp-mail-client-attachments.py ~/BeagleBoardVNS/AudioFiles/$mp3Name.mp3

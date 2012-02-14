@@ -17,11 +17,11 @@
 
 // Application headers
 #include     "debug.h"
-#include     "audio_thread.h"
+// #include     "audio_thread.h"
 #include     "gpio.h"
 
 // Global audio thread environment
-audio_thread_env audio_env = {0};
+// audio_thread_env audio_env = {0};
 
 /* Store previous signal handler and call it */
 void (*pSigPrev)(int sig);
@@ -30,7 +30,7 @@ void (*pSigPrev)(int sig);
 void signal_handler(int sig)
 {
     DBG( "Ctrl-C pressed, cleaning up and exiting..\n" );
-    audio_env.quit = 1;
+   //  audio_env.quit = 1;
 
     if( pSigPrev != NULL )
         (*pSigPrev)( sig );
@@ -54,19 +54,19 @@ int main( int argc, char *argv[] )
 	// button values
 	int button = 10;
 	int bButton = 2;
-	button =  (bbutton*32)+button;
+	button =  (bButton*32)+button;
 	exportgpio(button);
 
 	//SET DIRECTION
-	setdirectionout(button,1);	
+	setdirection(button,1);	
 
     while(1){
 
 	if(gpioRead(button)){
 		//Grab the audio from the microphone while the button is pressed
-		audioThreadReturn = audio_thread_fxn( (void *) &audio_env, button);
+		//audioThreadReturn = audio_thread_fxn( (void *) &audio_env, button);
 		//runs a script that will take the raw file saved and encode it to mp3 useing lame and send via email.
- 		system("./BeagleVNSScript");
+ 		system("./../BeagleVNSScript");
 		
 
 	}	
