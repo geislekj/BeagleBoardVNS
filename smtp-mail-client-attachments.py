@@ -7,6 +7,10 @@ from email.Utils import COMMASPACE, formatdate
 from email import Encoders
 
 def send_mail():
+    #This version promts the user to specify recipient, files,
+    #subject, and message. The version for incorperating in the
+    #notifier will need to read from a preferences file that 
+    #should be modifiable by the user.
 
     send_to = raw_input("Send To (Separated by a comma): ")
     files = raw_input("Files (Separated by a comma): ")
@@ -14,12 +18,14 @@ def send_mail():
     send_to=send_to.split(',')
     files=filter(None, files.split(','))
 
+    #Make sure that we are working with a list
     assert type(send_to)==list
     assert type(files)==list
 
     send_from = raw_input("Send From: ")
     subject = raw_input("Subject: ")
 
+    #Create a message object that we will be sending
     msg = MIMEMultipart()
     msg['From'] = send_from
     msg['To'] = COMMASPACE.join(send_to)
@@ -30,6 +36,7 @@ def send_mail():
 
     msg.attach( MIMEText(text) )
 
+    #Attach files to message
     for f in files:
         part = MIMEBase('application', "octet-stream")
         part.set_payload( open(f,"rb").read() )
@@ -37,6 +44,7 @@ def send_mail():
         part.add_header('Content-Disposition', 'attachment; filename="%s"' % os.path.basename(f))
         msg.attach(part)
 
+    #Open up a connection to the gmail servers on port 587
     server = smtplib.SMTP('smtp.gmail.com',587) #port 465 or 587
     server.ehlo()
     server.starttls()
