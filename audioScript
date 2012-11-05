@@ -1,1 +1,2 @@
 arecord -D plughw:0,0 -r 16000 -f S16_LE -c 2 -t raw -d 10 | lame -s 16 -r - blackbird.mp3
+gst-launch v4l2src num-buffers=1 ! ffmpegcolorspace ! video/x-raw-yuv,width=320,height=240 ! jpegenc ! filesink location=test.jpg
