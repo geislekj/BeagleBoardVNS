@@ -1,0 +1,20 @@
+#!/bin/bash
+# Nov-5-2012
+
+# Move the Temp Audio File to The BeagleVNS Audio File
+mv ~/tmp/audio.raw ~/BeagleBoardVNS/AudioFiles
+
+# Move to the BeagleVNS Directory
+cd ~/BeagleBoardVNS/AudioFiles
+
+# Encode the audio.raw into a mp3 file
+mp3Name = "Message"$(date+"%m-%d-%Y-%T")
+lame  -s 16 -r -m m audio.raw $mp3Name.mp3
+
+#Delete the old audio
+rm audio.raw
+
+# Send an email with mp3 as an attachment
+python smtp-mail-client-attachments.py ~/BeagleBoardVNS/AudioFiles/$mp3Name.mp3
+
+

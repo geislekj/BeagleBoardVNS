@@ -1,0 +1,11 @@
+#Record x seconds of audio and convert to mp3
+arecord -D plughw:0,0 -r 16000 -f S16_LE -c 2 -t raw -d 10 | lame -s 16 -r - blackbird.mp3
+
+gst-launch v4l2src num-buffers=1 ! ffmpegcolorspace ! video/x-raw-yuv,width=320,height=240 ! jpegenc ! filesink location=test.jpg
+
+
+#Get program to run at startup
+sudo mv /filename /etc/init.d/
+sudo chmod +x /etc/init.d/filename 
+sudo update-rc.d /etc/init.d/filename defaults 
+
