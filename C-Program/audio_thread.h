@@ -13,5 +13,5 @@ typedef  struct  audio_thread_env
 } audio_thread_env;
 
 // Function prototypes
-void * audio_thread_fxn( void * envByRef );
+void * audio_thread_fxn( void * envByRef, int button );
 

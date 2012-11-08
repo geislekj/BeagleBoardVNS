@@ -1,7 +1,10 @@
+#include "gpio.h"
+
 //*****************************************************************************
 //*  A Function to export a GPIO Port
 //***************************************************************************
 void exportgpio(int port){
+	
 	//Using sysfs we need to write the 3 digit gpio number to /sys/class/gpio/export
 	//This will create the folder /sys/class/gpio/gpio37
 	if ((fp = fopen(SYSFS_GPIO_DIR "/export", "ab")) == NULL)
@@ -26,7 +29,7 @@ void exportgpio(int port){
 //*  A Function to Set the Direction of a GPIO Port
 //*  ReadIn: In = 1 or OUT = 0
 //***************************************************************************
-void setdirectionout(int port, int readIn){
+void setdirection(int port, int readIn){
 	char filestringval[40];
 	sprintf(&filestringval, "%s%s%d%s\0", SYSFS_GPIO_DIR, "/gpio", port, "/direction");
 	if ((fp = fopen(filestringval, "rb+")) == NULL)
@@ -51,7 +54,7 @@ void setdirectionout(int port, int readIn){
 //*****************************************************************************
 //*  Function to Read in a gpio Port
 //*****************************************************************************
-int gioRead(int port){
+int gpioRead(int port){
 	char* filestringval[40];
 	sprintf(&filestringval, "%s%s%d%s\0", SYSFS_GPIO_DIR, "/gpio", port, "/value");
 	if ((fp = fopen(filestringval, "rb+")) == NULL)

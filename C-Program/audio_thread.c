@@ -14,6 +14,7 @@
 #include     "debug.h"                          // DBG and ERR macros
 #include     "audio_thread.h"                   // Audio thread definitions
 #include     "audio_input_output.h"             // Audio driver input and output functions
+#include     "gpio.h"
 
 //* ALSA and Mixer devices **
 //#define     SOUND_DEVICE     "plughw:0,0"	// This uses line in
@@ -48,7 +49,7 @@
 //*      void *            --  AUDIO_THREAD_SUCCESS or AUDIO_THREAD_FAILURE as **
 //*                            defined in audio_thread.h                       **
 //*******************************************************************************
-void *audio_thread_fxn( void *envByRef )
+void *audio_thread_fxn( void *envByRef, int button)
 {
 
 // Variables and definitions
@@ -137,7 +138,7 @@ void *audio_thread_fxn( void *envByRef )
     // Processing loop
     DBG( "Entering audio_thread_fxn processing loop\n" );
 
-    while(!button)
+    while(gpioRead(button))
     {
         // Read capture buffer from ALSA input device
 
@@ -156,9 +157,6 @@ void *audio_thread_fxn( void *envByRef )
             status = AUDIO_THREAD_FAILURE;
             goto cleanup;
         }
-	
-	//Read the GPIO to see if it is still pushed down.
-
     }
 
     DBG( "Exited audio_thread_fxn processing loop\n" );
