@@ -69,8 +69,10 @@ int gpioRead(int port){
 	char inString[10];
 	fgets(&inString, 10, fp);
 	fflush(fp);
-//			printf("...value set to 0...\n");	
 	fclose(fp);
-	return atoi(&inString);
+//	printf("...value set to 0...\n");	
+	int i = atoi(&inString);
+//	printf("i = %d\n", i);
+	return i;
 }
 

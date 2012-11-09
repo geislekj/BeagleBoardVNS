@@ -52,24 +52,27 @@ int main( int argc, char *argv[] )
     DBG( "Registered SIGINT signal handler.\n" );
 
 	// button values
-	int button = 10;
-	int bButton = 2;
+	int button = 16;
+	int bButton = 1;
+	int bValue = 0;
 	button =  (bButton*32)+button;
 	exportgpio(button);
 
 	//SET DIRECTION
 	setdirection(button,1);	
-
+	
+//	printf("ENTER");
     while(1){
-
-	if(gpioRead(button)){
+//	printf("Button:%d",bValue);
+	bValue = gpioRead(button);
+	if(bValue){
+		printf("Button Pushed");
 		//Grab the audio from the microphone while the button is pressed
 		//audioThreadReturn = audio_thread_fxn( (void *) &audio_env, button);
 		//runs a script that will take the raw file saved and encode it to mp3 useing lame and send via email.
  		system("./../BeagleVNSScript");
-		
-
 	}	
+//	sleep(100);
     }
 }
 
