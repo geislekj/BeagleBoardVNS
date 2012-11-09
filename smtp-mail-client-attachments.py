@@ -1,19 +1,21 @@
-import smtplib, os
+import smtplib, os, sys
 #from getpass import getpass
 from email.MIMEMultipart import MIMEMultipart
 from email.MIMEBase import MIMEBase
 from email.MIMEText import MIMEText
 from email.Utils import COMMASPACE, formatdate
 from email import Encoders
+from PREFERENCES import *
 
-def send_mail():
+#def send_mail(send_files=""):
+if __name__ == '__main__':
     #This version promts the user to specify recipient, files,
     #subject, and message. The version for incorperating in the
     #notifier will need to read from a preferences file that 
     #should be modifiable by the user.
-
-    send_to = raw_input("Send To (Separated by a comma): ")
-    files = raw_input("Files (Separated by a comma): ")
+    print sys.argv[1]
+    send_to = SEND_TO
+    files = sys.argv[1]
 
     send_to=send_to.split(',')
     files=filter(None, files.split(','))
@@ -22,8 +24,8 @@ def send_mail():
     assert type(send_to)==list
     assert type(files)==list
 
-    send_from = raw_input("Send From: ")
-    subject = raw_input("Subject: ")
+    send_from = SEND_FROM
+    subject = SUBJECT
 
     #Create a message object that we will be sending
     msg = MIMEMultipart()
@@ -32,7 +34,7 @@ def send_mail():
     msg['Date'] = formatdate(localtime=True)
     msg['Subject'] = subject
 
-    text = raw_input("Message: ")
+    text = MESSAGE
 
     msg.attach( MIMEText(text) )
 
@@ -50,12 +52,12 @@ def send_mail():
     server.starttls()
     server.ehlo()
     #password = getpass()
-    password="beagleece497"
+    password=PASSWORD
     server.login(send_from, password)
     server.sendmail(send_from,",".join(send_to),msg.as_string())
     server.close()
 
 
 
-if __name__ == '__main__':
-    send_mail()
+#if __name__ == '__main__':
+#    send_mail()

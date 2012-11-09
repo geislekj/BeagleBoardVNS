@@ -1,0 +1,5 @@
+SEND_TO= 'tom.atnip@gmail.com'
+SEND_FROM= 'beagle497@gmail.com'
+PASSWORD= 'beagleece497'
+SUBJECT= 'Audio Message'
+MESSAGE= 'You have a new message'
