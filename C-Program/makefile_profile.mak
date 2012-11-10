@@ -63,9 +63,9 @@ AT := @
 #CC      :=  $(CC_ROOT)/bin/arm-none-linux-gnueabi-gcc
 CC	:= gcc
 
-# CFLAGS       := -Wall -fno-strict-aliasing -lasound -march=armv7-a -D_REENTRANT -I$(DEVKIT)/armv7a/lib/gcc/arm-angstrom-linux-gnueabi/4.3.1/include
-# CFLAGS       := -Wall -fno-strict-aliasing -lasound -march=armv7-a -D_REENTRANT -I$(DEVKIT)/lib/gcc/arm-none-linux-gnueabi/4.3.3/include
-CFLAGS       := -Wall -fno-strict-aliasing -lasound -march=armv7-a -D_REENTRANT
+# CFLAGS       := -Wall -fno-strict-aliasing -llibasound -march=armv7-a -D_REENTRANT -I$(DEVKIT)/armv7a/lib/gcc/arm-angstrom-linux-gnueabi/4.3.1/include
+# CFLAGS       := -Wall -fno-strict-aliasing -llibasound -march=armv7-a -D_REENTRANT -I$(DEVKIT)/lib/gcc/arm-none-linux-gnueabi/4.3.3/include
+CFLAGS       := -Wall -fno-strict-aliasing /usr/lib/libasound.so.2.0.0 -march=armv7-a -D_REENTRANT
 LINKER_FLAGS := -lpthread
 
 DEBUG_CFLAGS   := -g -D_DEBUG_
@@ -97,7 +97,7 @@ C_DEPS  = $(addprefix $(PROFILE)/,$(DEPS))
 #            - output files are put into a $(PROFILE) subdirectory
 #            - set to "debug" by default; override via the command line
 # ---------------------------------------------------------------------
-PROGNAME := videoThru
+PROGNAME := beagle-VNS-App
 PROFILE  := DEBUG
 
 # -------------------------------------------------
