@@ -218,7 +218,7 @@ int main( int argc, char *argv[] )
 			}
 
 			//runs a script that will take the raw file saved and encode it to mp3 useing lame and send via email.
-	 		system("./../BeagleVNSScript");
+	 		system("~/BeagleBoardVNS/BeagleVNSScript");
 			
 			//reset recording flag
 			recording = 0;
