@@ -76,3 +76,37 @@ int gpioRead(int port){
 	return i;
 }
 
+//*****************************************************************************
+//*  Function to Write in a gpio Port
+//*****************************************************************************
+void gpioWrite(int port, int trigger){
+	char* filestringval[40];
+	sprintf(&filestringval, "%s%s%d%s\0", SYSFS_GPIO_DIR, "/gpio", port, "/value");
+	if ((fp = fopen(filestringval, "rb+")) == NULL)
+	{
+		printf("Cannot open value file.\n");
+		exit(1);
+	}
+	
+	if(trigger == 1){
+			//Set pointer to begining of the file
+			rewind(fp);
+			//Write our value of "1" to the file 
+			char set_value[5];
+			strcpy(set_value,"1");
+			fwrite(&set_value, sizeof(char), 1, fp);
+			fflush(fp);
+//			printf("...value set to 1...\n");
+	}else{
+			//Set pointer to begining of the file
+			rewind(fp);
+			//Write our value of "0" to the file 
+			char set_value[5];
+			strcpy(set_value,"0");
+			fwrite(&set_value, sizeof(char), 1, fp);
+			fflush(fp);
+//			printf("...value set to 0...\n");	
+	}	
+	fclose(fp);
+}
+
