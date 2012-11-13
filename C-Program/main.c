@@ -89,8 +89,19 @@ int main( int argc, char *argv[] )
 	audio_env.button = button;
 	exportgpio(button);
 
+	// led light
+	int led = 17;
+	int bled = 1;
+	led = (bled*32)+led;
+	exportgpio(led);
+
 	//SET DIRECTION
 	setdirection(button,1);	
+	setdirection(led,0);
+
+	//turn off led
+	gpioWrite(led,1);
+
 	
 	// Thread parameters and return value
         void             * status = AUDIO_THREAD_SUCCESS;      // < see above
@@ -149,11 +160,7 @@ int main( int argc, char *argv[] )
                 if( snd_pcm_readi(pcm_capture_handle, inputBuffer, blksize/BYTESPERFRAME) < 0 )
   	        {
                	    snd_pcm_prepare(pcm_capture_handle);
-               	    ERR( "<<<<<<<<<<<<<<< Buffer Overrun >>>>>>>>>>>>>>>\n");
-                     ERR( "Error reading the data from file descriptor %d\n", (int) pcm_capture_handle );
-                     status = AUDIO_THREAD_FAILURE;
-                     goto  cleanup ;
-                }
+                 }
 
 		//Starts to record audio
 		if(bValue && !recording){
@@ -177,6 +184,7 @@ int main( int argc, char *argv[] )
 
                        // Processing loop
                        DBG( "Entering audio_thread_fxn processing loop\n" );
+		       gpioWrite(led,0);
                 }
 
     		//saves to file while recording.
@@ -192,6 +200,7 @@ int main( int argc, char *argv[] )
 		// Sends the audio on button release
 		if(!bValue && recording){
 			printf("Button Released");
+			gpioWrite(led,1);
 
                         DBG( "Closing output file at FILE ptr %p\n", outfile );
                         fclose( outfile );
