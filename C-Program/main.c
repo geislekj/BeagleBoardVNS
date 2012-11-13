@@ -144,6 +144,17 @@ int main( int argc, char *argv[] )
 		//printf("Button:%d",bValue);
 		bValue = gpioRead(button);
 
+		
+		// Read capture buffer from ALSA input device
+                if( snd_pcm_readi(pcm_capture_handle, inputBuffer, blksize/BYTESPERFRAME) < 0 )
+  	        {
+               	    snd_pcm_prepare(pcm_capture_handle);
+               	    ERR( "<<<<<<<<<<<<<<< Buffer Overrun >>>>>>>>>>>>>>>\n");
+                     ERR( "Error reading the data from file descriptor %d\n", (int) pcm_capture_handle );
+                     status = AUDIO_THREAD_FAILURE;
+                     goto  cleanup ;
+                }
+
 		//Starts to record audio
 		if(bValue && !recording){
                 	printf("Button Pushed");
@@ -166,38 +177,24 @@ int main( int argc, char *argv[] )
 
                        // Processing loop
                        DBG( "Entering audio_thread_fxn processing loop\n" );
-                            
-                       while(bValue)
-                       {
-                              	bValue = gpioRead(audio_env.button);
-                                // Read capture buffer from ALSA input device
+                }
 
-                                if( snd_pcm_readi(pcm_capture_handle, inputBuffer, blksize/BYTESPERFRAME) < 0 )
-                                {
-                        	    snd_pcm_prepare(pcm_capture_handle);
-                               	    ERR( "<<<<<<<<<<<<<<< Buffer Overrun >>>>>>>>>>>>>>>\n");
-                                    ERR( "Error reading the data from file descriptor %d\n", (int) pcm_capture_handle );
-                                    status = AUDIO_THREAD_FAILURE;
-                                    goto  cleanup ;
-                                }
-
-                                if( fwrite( inputBuffer, sizeof( char ), blksize, outfile ) < blksize )
-                                {
-                                    ERR( "Error writing the data to FILE pointer %p\n", outfile );
-                                    status = AUDIO_THREAD_FAILURE;
-                                    goto cleanup;
-                                }
-                       }
-
-                       
-                       DBG( "Closing output file at FILE ptr %p\n", outfile );
-                       fclose( outfile );
-
-		}	
+    		//saves to file while recording.
+                if(bValue && recording){
+	                if( fwrite( inputBuffer, sizeof( char ), blksize, outfile ) < blksize )
+                        {
+                             ERR( "Error writing the data to FILE pointer %p\n", outfile );
+                             status = AUDIO_THREAD_FAILURE;
+                             goto cleanup;
+                        }
+                }	
 	
 		// Sends the audio on button release
 		if(!bValue && recording){
 			printf("Button Released");
+
+                        DBG( "Closing output file at FILE ptr %p\n", outfile );
+                        fclose( outfile );
 
 			//runs a script that will take the raw file saved and encode it to mp3 useing lame and send via email.
 	 		system("./../BeagleVNSScript");
