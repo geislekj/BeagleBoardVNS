@@ -36,7 +36,7 @@
 #define     RIGHT_GAIN       100
 
 //*  Parameters for audio thread execution **
-#define     BLOCKSIZE        8000
+#define     BLOCKSIZE        48000
 
 // Success and failure definitions for the thread
 #define     AUDIO_THREAD_SUCCESS     ( ( void * ) 0 )
@@ -195,6 +195,18 @@ int main( int argc, char *argv[] )
 
                         DBG( "Closing output file at FILE ptr %p\n", outfile );
                         fclose( outfile );
+			
+			DBG( "Freeing audio input buffer at location %p\n", inputBuffer );
+        		free( inputBuffer );
+       			DBG( "Freed audio input buffer at location %p\n", inputBuffer );
+
+			// Create input buffer to read into from OSS input device
+			if( ( inputBuffer = malloc( blksize ) ) == NULL )
+			{
+			   ERR( "Failed to allocate memory for input block (%d)\n", blksize );
+			   status = AUDIO_THREAD_FAILURE;
+			   goto  cleanup ;
+			}
 
 			//runs a script that will take the raw file saved and encode it to mp3 useing lame and send via email.
 	 		system("./../BeagleVNSScript");
