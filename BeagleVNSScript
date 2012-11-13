@@ -17,10 +17,3 @@ rm audio.raw
 
 # Send an email with mp3 as an attachment
 python ../smtp-mail-client-attachments.py ~/BeagleBoardVNS/AudioFiles/Message.mp3
-
-#start a new instance of the program
-cd ~/BeagleBoardVNS/C-Program/
-./beagle-VNS-App_DEBUG.Beagle
-
-
-
